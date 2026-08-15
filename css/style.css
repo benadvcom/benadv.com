@@ -297,7 +297,7 @@ p,li,td,small{color:var(--muted);font-weight:400}
 .connect-item b,.tool-card-text strong,.canchi-pill b{color:var(--text);font-weight:600}
 .home-clock-time,.calendar-live-time{color:var(--text);font-weight:650}
 .home-clock-top,.calendar-live-location{
-  color:var(--brand);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:none
+  color:var(--brand);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase
 }
 .cal-month-head h2,.cal-truc-head h2,.tools-section h2,.connect-heading h2{text-transform:none}
 .cal-month-nav select,.cal-today{text-transform:none}
@@ -343,3 +343,6 @@ body.dark .home-social-link.social-github,
 body.dark .home-social-link.social-threads{--social:#fff;--social-soft:#17212B}
 body.dark .home-social-link .home-social-icon{background:var(--social-soft)}
 body.dark .home-social-link:hover .home-social-icon{background:var(--social);color:#fff}
+
+/* Final clock location case */
+.home-clock-top,.calendar-live-location{text-transform:none!important;}

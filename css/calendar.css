@@ -27,3 +27,6 @@
 .cal-truc-col.avoid h3{color:#B95548}
 .cal-today{background:var(--brand)}
 .cal-today:hover{background:var(--brand-hover)}
+
+/* Final clock location case */
+.home-clock-top,.calendar-live-location{text-transform:none!important;}

@@ -312,8 +312,8 @@ function updateLiveCalendar(){
  const solarEl=document.getElementById("liveSolarDate");
  const lunarEl=document.getElementById("liveLunarDate");
  if(location) location.textContent=lang==="en"
- ?"HO CHI MINH CITY · VIETNAM · GMT+7"
- :"THÀNH PHỐ HỒ CHÍ MINH · VIỆT NAM · GMT+7";
+ ?"Ho Chi Minh City · Vietnam · GMT+7"
+ :"Thành phố Hồ Chí Minh · Việt Nam · GMT+7";
  if(clock) clock.textContent=time;
  if(solarEl) solarEl.textContent=lang==="en"
  ?`Solar: ${solar}`

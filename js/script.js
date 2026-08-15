@@ -106,21 +106,36 @@ function getSavedLanguage(){
 function getCurrentFile(){
  const path = window.location.pathname.replace(/\\/g,"/");
  const parts = path.split("/").filter(Boolean);
- return parts.length ? parts[parts.length-1] : "index.html";
+
+ // Cloudflare Pages commonly serves / and /en/ as index.html.
+ if (parts.length === 0) return "index.html";
+ if (parts.length === 1 && parts[0] === "en") return "index.html";
+
+ return parts[parts.length - 1] || "index.html";
 }
+
 function isEnglishPage(){
  const path = window.location.pathname.replace(/\\/g,"/");
- const parts = path.split("/").filter(Boolean);
- return parts.length >= 2 && parts[parts.length-2] === "en";
+ const normalized = path.replace(/\/+$/,"");
+
+ // English home can appear as /en or /en/.
+ if (normalized === "/en") return true;
+
+ const parts = normalized.split("/").filter(Boolean);
+ return parts.length >= 2 && parts[parts.length - 2] === "en";
 }
+
 function getLanguageFile(lang){
  const file = getCurrentFile();
  const en = isEnglishPage();
- if(lang === "en"){
- return en ? `./${file}` : `en/${file}`;
+
+ if (lang === "en"){
+   return en ? `./${file}` : `./en/${file}`;
  }
+
  return en ? `../${file}` : `./${file}`;
 }
+
 function setLanguage(lang){
  const next = lang === "en" ? "en" : "vi";
  const dict = translations[next] || translations.vi;

@@ -1,20 +1,10 @@
-BENADV.COM — COMPLETE SOURCE
+BENADV.COM - SOCIAL ICON FIX
 
-This is the consolidated source package.
+Fixed the social icons by replacing external SVG <use> references with inline SVG paths.
+This works reliably with:
+- Cloudflare Pages
+- GitHub Pages
+- local file:// preview
 
-Main behavior:
-- Vietnamese is the default language.
-- EN / VI switch is remembered per page.
-- 24-hour GMT+7 clock.
-- Location:
-  - VI: Thành phố Hồ Chí Minh · Việt Nam · GMT+7
-  - EN: Ho Chi Minh City · Vietnam · GMT+7
-- Vietnamese hero: Mình là Ben
-- English hero: I am Ben
-- Logo: BenADV
-- Photos & Videos is link-only; no standalone page is created.
-- Social usernames are embedded in the href targets, not shown as visible text.
-- No external font or icon CDN is required.
-
-Recommended deployment:
-Cloudflare Pages with DNS on Cloudflare.
+No external icon request is needed.
+Brand colors remain controlled by CSS.

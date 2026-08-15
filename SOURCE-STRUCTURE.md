@@ -1,35 +1,44 @@
-# BenADV.com — Complete Source Structure
+# BenADV.com — Source Structure
 
-## Pages
-- `index.html` — Vietnamese home
-- `en/index.html` — English home
-- `calendar.html` — Vietnamese perpetual calendar
-- `en/calendar.html` — English perpetual calendar
-- `utilities.html` — Vietnamese utilities
-- `en/utilities.html` — English utilities
-- `updates.html`, `notes.html` — supporting pages
-- `404.html` — fallback page
+## Root files
+- `index.html` — Vietnamese homepage.
+- `en/index.html` — English homepage.
+- `calendar.html` / `en/calendar.html` — Perpetual calendar.
+- `utilities.html` / `en/utilities.html` — Utilities hub.
+- `updates.html`, `notes.html` — lightweight supporting pages.
+- `robots.txt` — crawler rules.
+- `sitemap.xml` — indexable URLs.
+- `_headers` — Cloudflare cache/security headers.
 
 ## CSS
-- `css/style.css` — global design, colors, typography, navigation, homepage, utilities, social icons
-- `css/calendar.css` — calendar-only styling
+- `css/style.css` — global design system, typography, header, navigation, homepage and utilities.
+- `css/calendar.css` — calendar-only layout.
+- `:root` at the top of `style.css` is the main place to change:
+  - colors
+  - font stack
+  - max width
+  - border radius
+  - shadows
 
 ## JavaScript
-- `js/script.js` — language switch, theme, navigation, home clock
-- `js/calendar.js` — lunar calendar, Can Chi, zodiac hours, monthly calendar
+- `js/script.js` — global navigation, language switch, theme, homepage clock.
+- `js/calendar.js` — lunar conversion, Can Chi, zodiac hours and monthly calendar.
 
 ## Assets
-- `assets/benadv-logo.svg`
-- `assets/benadv-icon.svg`
+- `assets/benadv-logo.svg` — editable full BenADV logo.
+- `assets/benadv-icon.svg` — editable app/favicon icon.
 
-## Technical
-- `_headers` — Cloudflare Pages headers/cache
-- `robots.txt`
-- `sitemap.xml`
-
-## Brand
-- Logo: BenADV
-- Vietnamese menu label: Ben
-- English menu label: Ben
+## Branding
+- Visible logo: `BenADV`
+- Vietnamese menu: `Ben`
+- English menu: `Ben`
+- Domain: `BenADV.com`
 - Ben ADV = Ben Adventure
-- Domain: BenADV.com
+
+## Color palette
+- Brand blue: `#169EEA`
+- Cyan: `#20C4F3`
+- Deep blue: `#087FF0`
+- Navy text: `#0B1F33`
+- Accent orange: `#FF9A1F`
+- Soft background: `#F6FAFD`
