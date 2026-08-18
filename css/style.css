@@ -306,7 +306,7 @@ p,li,td,small{color:var(--muted);font-weight:400}
 .home-meta-dot{background:var(--brand);box-shadow:0 0 0 4px rgba(22,158,234,.10)}
 .home-clock-panel{background:linear-gradient(180deg,var(--surface-strong),var(--surface));box-shadow:var(--shadow-soft)}
 .home-connect-modern{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.tool-card{background:#fff;box-shadow:0 8px 20px rgba(16,35,53,.035)}
+.tool-card{background:#0a66c2;box-shadow:0 8px 20px rgba(16,35,53,.035)}
 .tool-card:hover{background:var(--brand-soft)}
 .home-social-link{color:var(--text-soft);font-weight:500}
 .home-social-link:hover{color:var(--brand)}
