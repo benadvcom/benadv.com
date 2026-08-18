@@ -1,0 +1,31 @@
+name: IndexNow
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit canonical URLs to IndexNow
+        env:
+          HOST: benadv.com
+          KEY: d464c4dfb5c110704a4ac1a2d20ab03c
+        run: |
+          urls=$(python - <<'PY'
+          import json
+          urls=[
+            "https://benadv.com/",
+            "https://benadv.com/calendar.html",
+            "https://benadv.com/utilities.html",
+            "https://benadv.com/en/",
+            "https://benadv.com/en/calendar.html",
+            "https://benadv.com/en/utilities.html",
+          ]
+          print(json.dumps(urls))
+          PY
+          )
+          curl --fail --silent --show-error -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data "{\"host\":\"${HOST}\",\"key\":\"${KEY}\",\"keyLocation\":\"https://${HOST}/${KEY}.txt\",\"urlList\":${urls}}"

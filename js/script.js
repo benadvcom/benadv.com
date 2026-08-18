@@ -23,7 +23,7 @@ const translations = {
  "utilities.c2":"Tiện ích 02","utilities.p2":"Các công cụ hữu ích khác.",
  "common.more":"Xem thêm →","common.open":"Mở tiện ích →",
  "contact.label":"LIÊN HỆ","contact.title":"Liên hệ","contact.website":"Website:","contact.email":"Email:","contact.phone":"Điện thoại:",
- "footer":"Bảo lưu mọi quyền.","clock.location":"Thành phố Hồ Chí Minh · Việt Nam · GMT+7"
+ "footer":"","clock.location":"Thành phố Hồ Chí Minh · Việt Nam · GMT+7"
  },
  en: {
  "nav.about":"About","nav.updates":"Updates","nav.notes":"Notes","nav.utilities":"Utilities","nav.contact":"Contact",
@@ -46,7 +46,7 @@ const translations = {
  "utilities.c2":"Utility 02","utilities.p2":"Other useful tools.",
  "common.more":"Read more →","common.open":"Open tool →",
  "contact.label":"CONTACT","contact.title":"Contact","contact.website":"Website:","contact.email":"Email:","contact.phone":"Phone:",
- "footer":"All rights reserved.","clock.location":"Ho Chi Minh City · Vietnam · GMT+7"
+ "footer":"","clock.location":"Ho Chi Minh City · Vietnam · GMT+7"
  }
 };
 const header = document.querySelector(".site-header");
@@ -106,36 +106,21 @@ function getSavedLanguage(){
 function getCurrentFile(){
  const path = window.location.pathname.replace(/\\/g,"/");
  const parts = path.split("/").filter(Boolean);
-
- // Cloudflare Pages commonly serves / and /en/ as index.html.
- if (parts.length === 0) return "index.html";
- if (parts.length === 1 && parts[0] === "en") return "index.html";
-
- return parts[parts.length - 1] || "index.html";
+ return parts.length ? parts[parts.length-1] : "index.html";
 }
-
 function isEnglishPage(){
  const path = window.location.pathname.replace(/\\/g,"/");
- const normalized = path.replace(/\/+$/,"");
-
- // English home can appear as /en or /en/.
- if (normalized === "/en") return true;
-
- const parts = normalized.split("/").filter(Boolean);
- return parts.length >= 2 && parts[parts.length - 2] === "en";
+ const parts = path.split("/").filter(Boolean);
+ return parts.length >= 2 && parts[parts.length-2] === "en";
 }
-
 function getLanguageFile(lang){
  const file = getCurrentFile();
  const en = isEnglishPage();
-
- if (lang === "en"){
-   return en ? `./${file}` : `./en/${file}`;
+ if(lang === "en"){
+ return en ? `./${file}` : `en/${file}`;
  }
-
  return en ? `../${file}` : `./${file}`;
 }
-
 function setLanguage(lang){
  const next = lang === "en" ? "en" : "vi";
  const dict = translations[next] || translations.vi;
