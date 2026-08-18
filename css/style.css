@@ -295,7 +295,7 @@ p,li,td,small{color:var(--muted);font-weight:400}
 }
 .home-lead,.page-intro,.calendar-page-intro{color:var(--muted);font-weight:400}
 .btn,.cal-today{font-weight:600}
-.connect-item b,.tool-card-text strong,.canchi-pill b{color:var(--text);font-weight:600}
+.connect-item b,.tool-card-text strong,.canchi-pill b{color:#1596f5;font-weight:600}
 .home-clock-time,.calendar-live-time{color:var(--text);font-weight:650}
 .home-clock-top,.calendar-live-location{
   color:var(--brand);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase
@@ -309,7 +309,7 @@ p,li,td,small{color:var(--muted);font-weight:400}
 .home-connect-modern{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .tool-card{background:#fff;box-shadow:0 8px 20px rgba(16,35,53,.035)}
 .tool-card:hover{background:var(--brand-soft)}
-.home-social-link{color:var(--text-soft);font-weight:500}
+.home-social-link{color:#3884bf;font-weight:500}
 .home-social-link:hover{color:var(--brand)}
 
 /* =========================================================
@@ -338,10 +338,10 @@ p,li,td,small{color:var(--muted);font-weight:400}
 .home-social-link.social-linkedin{--social:#0A66C2;--social-soft:#EAF2FB}
 .home-social-link.social-threads{--social:#101010;--social-soft:#F2F2F2}
 .home-social-link:hover .home-social-icon{color:#fff;background:var(--social)}
-body.dark .home-social-link.social-x,
-body.dark .home-social-link.social-tiktok,
-body.dark .home-social-link.social-github,
-body.dark .home-social-link.social-threads{--social:#fff;--social-soft:#17212B}
+body.dark .home-social-link.social-x{--social:#111;--social-soft:#5c8cbc;}
+body.dark .home-social-link.social-tiktok{--social:#111;--social-soft:#5c8cbc;}
+body.dark .home-social-link.social-github{--social:#111;--social-soft:#5c8cbc;}
+body.dark .home-social-link.social-threads{--social:#111;--social-soft:#5c8cbc;}
 body.dark .home-social-link .home-social-icon{background:var(--social-soft)}
 body.dark .home-social-link:hover .home-social-icon{background:var(--social);color:#fff}
 
