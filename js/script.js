@@ -98,7 +98,7 @@ function getPageId(){
  return document.body.getAttribute("data-page") || "home";
 }
 function getLanguageStorageKey(){
- return `chanh:lang:${getPageId()}`;
+ return "chanh:lang";
 }
 function getSavedLanguage(){
  return localStorage.getItem(getLanguageStorageKey()) || "vi";
@@ -106,12 +106,17 @@ function getSavedLanguage(){
 function getCurrentFile(){
  const path = window.location.pathname.replace(/\\/g,"/");
  const parts = path.split("/").filter(Boolean);
- return parts.length ? parts[parts.length-1] : "index.html";
+ if (!parts.length) return "index.html";
+ const last = parts[parts.length-1];
+ return last.includes(".") ? last : "index.html";
 }
 function isEnglishPage(){
  const path = window.location.pathname.replace(/\\/g,"/");
  const parts = path.split("/").filter(Boolean);
- return parts.length >= 2 && parts[parts.length-2] === "en";
+ if (!parts.length) return false;
+ const last = parts[parts.length-1];
+ const dirs = last.includes(".") ? parts.slice(0,-1) : parts;
+ return dirs.length > 0 && dirs[dirs.length-1] === "en";
 }
 function getLanguageFile(lang){
  const file = getCurrentFile();
@@ -158,7 +163,7 @@ function setTheme(theme){
  themeToggle.setAttribute("aria-label", dark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối");
  themeToggle.title = dark ? "Giao diện sáng" : "Giao diện tối";
  const themeMeta = document.querySelector('meta[name="theme-color"]');
- if (themeMeta) themeMeta.setAttribute("content", dark ? "#0b1118" : "#1aa6f6");
+ if (themeMeta) themeMeta.setAttribute("content", dark ? "#0A1220" : "#1E4FE0");
  }
  localStorage.setItem("theme", dark ? "dark" : "light");
 }
@@ -237,8 +242,7 @@ function hcmDateParts(){
  const out={}; parts.forEach(p=>{if(p.type!=="literal")out[p.type]=Number(p.value);}); return out;
 }
 function updateClock(){
- const pageKey = document.body.getAttribute("data-page") || "home";
- const lang = localStorage.getItem(`chanh:lang:${pageKey}`) || (document.documentElement.lang === "en" ? "en" : "vi");
+ const lang = localStorage.getItem("chanh:lang") || (document.documentElement.lang === "en" ? "en" : "vi");
  const now=new Date();
  const time=new Intl.DateTimeFormat("vi-VN",{timeZone:TZ,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(now);
  const solar=new Intl.DateTimeFormat(
