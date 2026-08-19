@@ -63,38 +63,6 @@ if (header){
  new ResizeObserver(syncHeader).observe(header);
  }
 }
-const navToggle = document.getElementById("navToggle");
-const mainNav = document.getElementById("mainNav");
-function closeNav(){
-  if (!navToggle || !mainNav) return;
-  mainNav.classList.remove("open");
-  navToggle.setAttribute("aria-expanded","false");
-}
-function openNav(){
-  if (!navToggle || !mainNav) return;
-  mainNav.classList.add("open");
-  navToggle.setAttribute("aria-expanded","true");
-}
-if (navToggle && mainNav){
-  navToggle.addEventListener("click", ()=>{
-    const isOpen = mainNav.classList.contains("open");
-    if (isOpen) closeNav(); else openNav();
-  });
-  mainNav.addEventListener("click", (e)=>{
-    if (e.target.closest("a")) closeNav();
-  });
-  document.addEventListener("click", (e)=>{
-    if (!mainNav.classList.contains("open")) return;
-    if (mainNav.contains(e.target) || navToggle.contains(e.target)) return;
-    closeNav();
-  });
-  document.addEventListener("keydown", (e)=>{
-    if (e.key === "Escape") closeNav();
-  });
-  window.addEventListener("resize", ()=>{
-    if (window.innerWidth > 700) closeNav();
-  }, {passive:true});
-}
 const navLinks = document.querySelectorAll(".nav a");
 const pageId = document.body.getAttribute("data-page") || "home";
 function setActiveNavByPage(){
@@ -124,99 +92,135 @@ if(pageId === "home"){
  sections.forEach(section=>observer.observe(section));
  }
 }
+
+
 const languageToggle = document.getElementById("languageToggle");
 const themeToggle = document.getElementById("themeToggle");
+
+const LANGUAGE_STORAGE_KEY = "benadv:language";
+
 function getPageId(){
  return document.body.getAttribute("data-page") || "home";
 }
-function getLanguageStorageKey(){
- return "chanh:lang";
-}
+
 function getSavedLanguage(){
- return localStorage.getItem(getLanguageStorageKey()) || "vi";
+ const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+ if (saved === "en" || saved === "vi") return saved;
+
+ // Migrate the previous per-page language preference to one global preference.
+ const oldKeys = Object.keys(localStorage).filter((key)=>key.startsWith("chanh:lang:"));
+ const oldEnglish = oldKeys.some((key)=>localStorage.getItem(key) === "en");
+ const migrated = oldEnglish ? "en" : "vi";
+ localStorage.setItem(LANGUAGE_STORAGE_KEY, migrated);
+ return migrated;
 }
+
 function getCurrentFile(){
  const path = window.location.pathname.replace(/\\/g,"/");
- const parts = path.split("/").filter(Boolean);
- if (!parts.length) return "index.html";
- const last = parts[parts.length-1];
- return last.includes(".") ? last : "index.html";
+ const normalized = path.replace(/\/+$/,"");
+
+ // Root and /en/ are both index pages.
+ if (!normalized || normalized === "/en") return "index.html";
+
+ const parts = normalized.split("/").filter(Boolean);
+ return parts[parts.length - 1] || "index.html";
 }
+
 function isEnglishPage(){
  const path = window.location.pathname.replace(/\\/g,"/");
- const parts = path.split("/").filter(Boolean);
- if (!parts.length) return false;
- const last = parts[parts.length-1];
- const dirs = last.includes(".") ? parts.slice(0,-1) : parts;
- return dirs.length > 0 && dirs[dirs.length-1] === "en";
+ const normalized = path.replace(/\/+$/,"");
+ if (normalized === "/en") return true;
+
+ const parts = normalized.split("/").filter(Boolean);
+ return parts.length >= 2 && parts[parts.length - 2] === "en";
 }
+
 function getLanguageFile(lang){
  const file = getCurrentFile();
  const en = isEnglishPage();
- if(lang === "en"){
- return en ? `./${file}` : `en/${file}`;
+
+ if (lang === "en"){
+   return en ? `./${file}` : `./en/${file}`;
  }
+
  return en ? `../${file}` : `./${file}`;
 }
+
 function setLanguage(lang){
  const next = lang === "en" ? "en" : "vi";
  const dict = translations[next] || translations.vi;
+
  document.querySelectorAll("[data-i18n]").forEach((el)=>{
- const key = el.getAttribute("data-i18n");
- if (dict[key] !== undefined) el.textContent = dict[key];
+   const key = el.getAttribute("data-i18n");
+   if (dict[key] !== undefined) el.textContent = dict[key];
  });
+
  document.documentElement.lang = next;
+
  if (languageToggle){
- const isEnglish = next === "en";
- languageToggle.classList.toggle("on", isEnglish);
- languageToggle.setAttribute("aria-checked", isEnglish ? "true" : "false");
- languageToggle.setAttribute("aria-label", isEnglish ? "Switch to Vietnamese" : "Switch to English");
+   const isEnglish = next === "en";
+   languageToggle.classList.toggle("on", isEnglish);
+   languageToggle.setAttribute("aria-checked", isEnglish ? "true" : "false");
+   languageToggle.setAttribute("aria-label", isEnglish ? "Switch to Vietnamese" : "Switch to English");
  }
- localStorage.setItem(getLanguageStorageKey(), next);
+
+ localStorage.setItem(LANGUAGE_STORAGE_KEY, next);
  window.dispatchEvent(new CustomEvent("calendar:language"));
  updateClock();
 }
+
 function ensurePageLanguage(){
- // The URL the visitor is actually on is the source of truth for the page
- // language. We only sync localStorage to match it (so the toggle button
- // and future navigation behave correctly) -- we never force-redirect the
- // visitor away from the language they explicitly navigated to.
+ const saved = getSavedLanguage();
  const current = isEnglishPage() ? "en" : "vi";
- localStorage.setItem(getLanguageStorageKey(), current);
+
+ if (saved !== current){
+   window.location.replace(getLanguageFile(saved));
+   return false;
+ }
+
  return true;
 }
+
 function setTheme(theme){
  const dark = theme === "dark";
  document.body.classList.toggle("dark", dark);
+
  if (themeToggle){
- const icon = themeToggle.querySelector(".theme-symbol");
- if (icon) icon.textContent = dark ? "☀" : "☾";
- themeToggle.setAttribute("aria-label", dark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối");
- themeToggle.title = dark ? "Giao diện sáng" : "Giao diện tối";
- const themeMeta = document.querySelector('meta[name="theme-color"]');
- if (themeMeta) themeMeta.setAttribute("content", dark ? "#0A1220" : "#1AA6F6");
+   const icon = themeToggle.querySelector(".theme-symbol");
+   if (icon) icon.textContent = dark ? "☀" : "☾";
+   themeToggle.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+   themeToggle.title = dark ? "Light theme" : "Dark theme";
+
+   const themeMeta = document.querySelector('meta[name="theme-color"]');
+   if (themeMeta) themeMeta.setAttribute("content", dark ? "#0b1118" : "#0077b6");
  }
+
  localStorage.setItem("theme", dark ? "dark" : "light");
 }
+
 if (languageToggle){
  languageToggle.addEventListener("click", ()=>{
- const current=getSavedLanguage();
- const next=current==="vi" ? "en" : "vi";
- localStorage.setItem(getLanguageStorageKey(), next);
- window.location.href=getLanguageFile(next);
+   const current = getSavedLanguage();
+   const next = current === "vi" ? "en" : "vi";
+   localStorage.setItem(LANGUAGE_STORAGE_KEY, next);
+   window.location.replace(getLanguageFile(next));
  });
 }
+
 if (themeToggle){
  themeToggle.addEventListener("click", ()=>{
- setTheme((localStorage.getItem("theme") || "light") === "light" ? "dark" : "light");
+   const next = (localStorage.getItem("theme") || "light") === "light" ? "dark" : "light";
+   setTheme(next);
  });
 }
+
 if (ensurePageLanguage() !== false){
  setTheme(localStorage.getItem("theme") || "light");
  setLanguage(getSavedLanguage());
  updateClock();
  setInterval(updateClock,1000);
 }
+
 function jdFromDate(dd, mm, yy){
  const a=Math.floor((14-mm)/12), y=yy+4800-a, m=mm+12*a-3;
  let jd=dd+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045;
@@ -273,7 +277,8 @@ function hcmDateParts(){
  const out={}; parts.forEach(p=>{if(p.type!=="literal")out[p.type]=Number(p.value);}); return out;
 }
 function updateClock(){
- const lang = localStorage.getItem("chanh:lang") || (document.documentElement.lang === "en" ? "en" : "vi");
+ const pageKey = document.body.getAttribute("data-page") || "home";
+ const lang = getSavedLanguage();
  const now=new Date();
  const time=new Intl.DateTimeFormat("vi-VN",{timeZone:TZ,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(now);
  const solar=new Intl.DateTimeFormat(
