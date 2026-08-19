@@ -63,6 +63,38 @@ if (header){
  new ResizeObserver(syncHeader).observe(header);
  }
 }
+const navToggle = document.getElementById("navToggle");
+const mainNav = document.getElementById("mainNav");
+function closeNav(){
+  if (!navToggle || !mainNav) return;
+  mainNav.classList.remove("open");
+  navToggle.setAttribute("aria-expanded","false");
+}
+function openNav(){
+  if (!navToggle || !mainNav) return;
+  mainNav.classList.add("open");
+  navToggle.setAttribute("aria-expanded","true");
+}
+if (navToggle && mainNav){
+  navToggle.addEventListener("click", ()=>{
+    const isOpen = mainNav.classList.contains("open");
+    if (isOpen) closeNav(); else openNav();
+  });
+  mainNav.addEventListener("click", (e)=>{
+    if (e.target.closest("a")) closeNav();
+  });
+  document.addEventListener("click", (e)=>{
+    if (!mainNav.classList.contains("open")) return;
+    if (mainNav.contains(e.target) || navToggle.contains(e.target)) return;
+    closeNav();
+  });
+  document.addEventListener("keydown", (e)=>{
+    if (e.key === "Escape") closeNav();
+  });
+  window.addEventListener("resize", ()=>{
+    if (window.innerWidth > 700) closeNav();
+  }, {passive:true});
+}
 const navLinks = document.querySelectorAll(".nav a");
 const pageId = document.body.getAttribute("data-page") || "home";
 function setActiveNavByPage(){
