@@ -287,8 +287,14 @@ function populateSelects(){
  selM.innerHTML=Array.from({length:12},(_,i)=>`<option value="${i+1}">${monthLabel} ${i+1}</option>`).join("");
  selY.innerHTML=Array.from({length:2130-1965+1},(_,i)=>`<option value="${1965+i}">${yearLabel} ${1965+i}</option>`).join("");
  syncSelects();
+ if(!selM.dataset.bound){
  selM.addEventListener("change",()=>{viewMonth=+selM.value;renderCalendar(viewMonth,viewYear,selected)});
+ selM.dataset.bound="1";
+ }
+ if(!selY.dataset.bound){
  selY.addEventListener("change",()=>{viewYear=+selY.value;renderCalendar(viewMonth,viewYear,selected)});
+ selY.dataset.bound="1";
+ }
 }
 function syncSelects(){ document.getElementById("selMonth").value=viewMonth; document.getElementById("selYear").value=viewYear; }
 function updateLiveCalendar(){

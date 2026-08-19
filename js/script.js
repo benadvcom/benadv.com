@@ -177,13 +177,12 @@ function setLanguage(lang){
  updateClock();
 }
 function ensurePageLanguage(){
- const saved = getSavedLanguage();
+ // The URL the visitor is actually on is the source of truth for the page
+ // language. We only sync localStorage to match it (so the toggle button
+ // and future navigation behave correctly) -- we never force-redirect the
+ // visitor away from the language they explicitly navigated to.
  const current = isEnglishPage() ? "en" : "vi";
- if (saved !== current){
- localStorage.setItem(getLanguageStorageKey(), saved);
- window.location.replace(getLanguageFile(saved));
- return false;
- }
+ localStorage.setItem(getLanguageStorageKey(), current);
  return true;
 }
 function setTheme(theme){
@@ -195,7 +194,7 @@ function setTheme(theme){
  themeToggle.setAttribute("aria-label", dark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối");
  themeToggle.title = dark ? "Giao diện sáng" : "Giao diện tối";
  const themeMeta = document.querySelector('meta[name="theme-color"]');
- if (themeMeta) themeMeta.setAttribute("content", dark ? "#0A1220" : "#1E4FE0");
+ if (themeMeta) themeMeta.setAttribute("content", dark ? "#0A1220" : "#1AA6F6");
  }
  localStorage.setItem("theme", dark ? "dark" : "light");
 }
